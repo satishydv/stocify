@@ -8,7 +8,19 @@ export default function Home() {
     <div className='w-[90%] md:w-[80%] mx-auto items-center grid grid-cols-1 md:grid-cols-2 gap-10'>
     {/* Text content */}
     <div>
-
+      {/* Logo */}
+      <div className="flex items-center mb-8">
+        <div className="w-15 h-15 rounded-lg flex items-center justify-center mr-3">
+          <Image
+            src="/icon/icon.png"
+            alt="Sellora Logo"
+            width={50}
+            height={50}
+            className="rounded-sm"
+          />
+        </div>
+        <span className="text-3xl font-bold text-gray-900">Stockify</span>
+      </div>
     
     <div className='flex flex-col gap-6'>
       <h1 className='text-3xl md:text-4xl lg:text-5xl font-extrabold text-black dark:text-white sm:leading-[2.5rem] md:leading-[4.5rem]'>
@@ -98,8 +110,8 @@ export default function Home() {
       <Image 
       src="/login/login.webp"
       alt="Hero Image"
-      width={700}
-      height={700}
+      width={800}
+      height={800}
       className='rounded-lg'
       />
     </div>
