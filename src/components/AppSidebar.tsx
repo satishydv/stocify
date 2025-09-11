@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Home,
   Inbox,
@@ -16,6 +18,7 @@ import {
   Coins,
   DollarSign,
   CircleDollarSign,
+  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -37,6 +40,8 @@ import {
 } from "./ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -78,6 +83,52 @@ const items = [
 ];
 
 const AppSidebar = () => {
+  const router = useRouter();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    
+    try {
+      // Get the token from localStorage
+      const token = localStorage.getItem('authToken');
+      
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` }),
+        },
+      });
+      
+      if (response.ok) {
+        // Clear any local storage or cookies if needed
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        sessionStorage.clear();
+        
+        // Redirect to login page
+        router.push('/');
+      } else {
+        console.error('Logout failed');
+        // Still clear local storage and redirect even if logout fails on server
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('user');
+        sessionStorage.clear();
+        router.push('/');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still clear local storage and redirect even if there's an error
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      sessionStorage.clear();
+      router.push('/');
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4">
@@ -220,7 +271,14 @@ const AppSidebar = () => {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>Account</DropdownMenuItem>
                 <DropdownMenuItem>Setting</DropdownMenuItem>
-                <DropdownMenuItem>Sign out</DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className="text-red-600 hover:text-red-700 focus:text-red-700"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {isLoggingOut ? "Signing out..." : "Sign out"}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
