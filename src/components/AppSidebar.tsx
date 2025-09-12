@@ -2,10 +2,6 @@
 
 import {
   Home,
-  Inbox,
-  Calendar,
-  Search,
-  Settings,
   User2,
   ChevronUp,
   Plus,
@@ -14,11 +10,14 @@ import {
   Box,
   Banknote,
   Warehouse,
-  CoinsIcon,
-  Coins,
-  DollarSign,
   CircleDollarSign,
   LogOut,
+  ChartBar,
+  Truck,
+  Users,
+  Shield,
+  List,
+  ShoppingCart,
 } from "lucide-react";
 import {
   Sidebar,
@@ -62,13 +61,13 @@ const items = [
   },
   {
     title: "Products",
-    url: "#",
+    url: "/dashboard/products",
     icon: Box,
   },
   {
-    title: "Finances",
+    title: "Orders",
     url: "#",
-    icon: Banknote,
+    icon: ShoppingCart,
   },
   {
     title: "Stocks",
@@ -79,6 +78,21 @@ const items = [
     title: "Sales",
     url: "#",
     icon: CircleDollarSign,
+  },
+  {
+    title: "Reports",
+    url: "#",
+    icon: ChartBar,
+  },
+  {
+    title: "Suppliers",
+    url: "#",
+    icon: Truck,
+  },
+  {
+    title: "Categories",
+    url: "#",
+    icon: List,
   },
 ];
 
@@ -196,7 +210,7 @@ const AppSidebar = () => {
           <SidebarGroup>
             <SidebarGroupLabel asChild>
               <CollapsibleTrigger>
-                Other Menus
+                Users and roles
                 <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
               </CollapsibleTrigger>
             </SidebarGroupLabel>
@@ -206,16 +220,16 @@ const AppSidebar = () => {
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link href="/#">
-                        <Projector />
-                        See All Projects
+                        <Users />
+                        Users
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Link href="/#">
-                        <Plus />
-                        Add Project
+                        <Shield />
+                        Roles
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -225,7 +239,7 @@ const AppSidebar = () => {
           </SidebarGroup>
         </Collapsible>
         {/* NESTED */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>Nested Items</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -257,7 +271,7 @@ const AppSidebar = () => {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
