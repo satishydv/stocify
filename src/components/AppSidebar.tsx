@@ -65,6 +65,11 @@ const items = [
     icon: Box,
   },
   {
+    title: "Users",
+    url: "/dashboard/users",
+    icon: Users,
+  },
+  {
     title: "Orders",
     url: "#",
     icon: ShoppingCart,
@@ -86,12 +91,12 @@ const items = [
   },
   {
     title: "Suppliers",
-    url: "#",
+    url: "/dashboard/suppliers",
     icon: Truck,
   },
   {
     title: "Categories",
-    url: "#",
+    url: "/dashboard/categories",
     icon: List,
   },
 ];
@@ -219,7 +224,7 @@ const AppSidebar = () => {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link href="/#">
+                      <Link href="/dashboard/users">
                         <Users />
                         Users
                       </Link>
@@ -227,7 +232,7 @@ const AppSidebar = () => {
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <Link href="/#">
+                      <Link href="/dashboard/roles">
                         <Shield />
                         Roles
                       </Link>

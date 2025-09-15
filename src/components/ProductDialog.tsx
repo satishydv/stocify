@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { IoCheckmark, IoClose as IoCloseIcon, IoMail } from "react-icons/io5"
+import { useProductStore } from "@/stores/productStore"
 
 interface ProductFormData {
   name: string
@@ -53,6 +54,7 @@ const categories = [
 export default function ProductDialog() {
   const [formData, setFormData] = useState<ProductFormData>(initialFormData)
   const [errors, setErrors] = useState<Partial<ProductFormData>>({})
+  const addProduct = useProductStore((state) => state.addProduct)
 
   const handleInputChange = (field: keyof ProductFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -77,8 +79,18 @@ export default function ProductDialog() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      console.log("Product data:", formData)
-      // Here you would typically send the data to your API
+      // Add product to store
+      addProduct({
+        name: formData.name,
+        sku: formData.sku,
+        price: parseFloat(formData.price),
+        category: formData.category,
+        status: formData.status,
+        quantityInStock: parseInt(formData.quantity),
+        supplier: formData.supplier,
+        icon: "📦" // Default icon for new products
+      })
+      
       // Reset form after successful submission
       setFormData(initialFormData)
       setErrors({})

@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Product, getStatusBadge } from "./product-data"
+import { useProductStore } from "@/stores/productStore"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,7 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { IoCopy, IoCreate, IoTrash, IoEllipsisVertical } from "react-icons/io5"
 
-export const productColumns: ColumnDef<Product>[] = [
+export const useProductColumns = (): ColumnDef<Product>[] => {
+  const { deleteProduct } = useProductStore()
+
+  return [
   {
     accessorKey: "name",
     header: "Name",
@@ -91,8 +95,7 @@ export const productColumns: ColumnDef<Product>[] = [
       }
 
       const handleDelete = () => {
-        // You can add delete functionality here
-        console.log("Delete product:", product.id)
+        deleteProduct(product.id)
       }
 
       return (
@@ -121,4 +124,5 @@ export const productColumns: ColumnDef<Product>[] = [
       )
     },
   },
-]
+  ]
+}

@@ -8,6 +8,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { LuGitPullRequestDraft } from "react-icons/lu"
+import { useFilterStore } from "@/stores/filterStore"
 
 // Category type definition
 type Category = {
@@ -31,18 +32,17 @@ const categories: Category[] = [
 
 export function CategoryDropdown() {
   const [open, setOpen] = useState(false)
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const { selectedCategories, setSelectedCategories, clearFilters } = useFilterStore()
 
   const handleCategoryToggle = (categoryValue: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(categoryValue) 
-        ? prev.filter(value => value !== categoryValue)
-        : [...prev, categoryValue]
-    )
+    const newSelection = selectedCategories.includes(categoryValue)
+      ? selectedCategories.filter(value => value !== categoryValue)
+      : [...selectedCategories, categoryValue]
+    setSelectedCategories(newSelection)
   }
 
   const handleClearFilters = () => {
-    setSelectedCategories([])
+    clearFilters()
   }
 
   return (

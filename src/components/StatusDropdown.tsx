@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 import { IoCheckmark, IoClose as IoCloseIcon, IoMail } from "react-icons/io5"
+import { useFilterStore } from "@/stores/filterStore"
 
 // Status options constant
 const STATUS_OPTIONS = [
@@ -33,18 +34,17 @@ const STATUS_OPTIONS = [
 
 export function StatusDropdown() {
   const [open, setOpen] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState<string[]>([])
+  const { selectedStatus, setSelectedStatus, clearFilters } = useFilterStore()
 
   const handleStatusToggle = (statusId: string) => {
-    setSelectedStatus(prev => 
-      prev.includes(statusId) 
-        ? prev.filter(id => id !== statusId)
-        : [...prev, statusId]
-    )
+    const newSelection = selectedStatus.includes(statusId)
+      ? selectedStatus.filter(id => id !== statusId)
+      : [...selectedStatus, statusId]
+    setSelectedStatus(newSelection)
   }
 
   const handleClearFilters = () => {
-    setSelectedStatus([])
+    clearFilters()
   }
 
   return (

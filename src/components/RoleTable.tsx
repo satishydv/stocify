@@ -6,32 +6,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { IoClose } from "react-icons/io5"
-import { StatusDropdown } from "@/components/StatusDropdown"
-import { CategoryDropdown } from "@/components/CategoryDropdown"
 import { DataTable } from "@/components/DataTable"
-import { useProductColumns } from "@/lib/product-columns"
-import { useFilteredProducts } from "@/hooks/useFilteredProducts"
+import { useRoleColumns } from "@/lib/role-columns"
+import { useRoleStore } from "@/stores/roleStore"
 import { useFilterStore } from "@/stores/filterStore"
 
 function FilterArea() {
   return (
     <div className="flex gap-3">
-      {/* status */}
+      {/* role type */}
       <div className="border-dashed border rounded-sm p-1 flex gap-2 items-center px-2 text-sm">
-        <span className="text-gray-600">Status</span>
+        <span className="text-gray-600">Type</span>
         <Separator orientation="vertical" />
         <div className="flex gap-2 items-center">
-          <Badge variant={"secondary"}>item 1</Badge>
-          <Badge variant={"secondary"}>item 1</Badge>
-        </div>
-      </div>
-      {/* category */}
-      <div className="border-dashed border rounded-sm p-1 flex gap-2 items-center px-2 text-sm">
-        <span className="text-gray-600">Category</span>
-        <Separator orientation="vertical" />
-        <div className="flex gap-2 items-center">
-          <Badge variant={"secondary"}>item 1</Badge>
-          <Badge variant={"secondary"}>item 1</Badge>
+          <Badge variant={"secondary"}>Admin</Badge>
+          <Badge variant={"secondary"}>User</Badge>
         </div>
       </div>
       <Button variant={"ghost"} className="p-1 px-2">
@@ -42,31 +31,35 @@ function FilterArea() {
   )
 }
 
-export function ProductTable() {
-  const filteredProducts = useFilteredProducts()
+export function RoleTable() {
+  const { roles } = useRoleStore()
   const { searchQuery, setSearchQuery } = useFilterStore()
-  const productColumns = useProductColumns()
+  const { columns, editDialog } = useRoleColumns()
+
+  // Filter roles based on search query
+  const filteredRoles = roles.filter(role =>
+    role.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    role.type.toLowerCase().includes(searchQuery.toLowerCase())
+  )
 
   return (
     <div>
       <div className="flex flex-col gap-3 mb-8 mt-6">
         <div className="flex items-center justify-between">
           <Input 
-            placeholder="Search by name..." 
+            placeholder="Search by role name or type..." 
             className="max-w-sm h-10"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <div className="flex items-center gap-4">
-            <StatusDropdown />
-            <CategoryDropdown />
-          </div>
         </div>
         {/* filter area */}
         <FilterArea />
       </div>
-      {/* Products table */}
-      <DataTable columns={productColumns} data={filteredProducts} />
+      {/* Roles table */}
+      <DataTable columns={columns} data={filteredRoles} />
+      {/* Edit dialog */}
+      {editDialog}
     </div>
   )
 }

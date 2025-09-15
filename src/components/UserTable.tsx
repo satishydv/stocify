@@ -6,32 +6,29 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { IoClose } from "react-icons/io5"
-import { StatusDropdown } from "@/components/StatusDropdown"
-import { CategoryDropdown } from "@/components/CategoryDropdown"
 import { DataTable } from "@/components/DataTable"
-import { useProductColumns } from "@/lib/product-columns"
-import { useFilteredProducts } from "@/hooks/useFilteredProducts"
-import { useFilterStore } from "@/stores/filterStore"
+import { useUserColumns } from "@/lib/user-columns"
+import { useUserStore } from "@/stores/userStore"
 
 function FilterArea() {
   return (
     <div className="flex gap-3">
+      {/* role */}
+      <div className="border-dashed border rounded-sm p-1 flex gap-2 items-center px-2 text-sm">
+        <span className="text-gray-600">Role</span>
+        <Separator orientation="vertical" />
+        <div className="flex gap-2 items-center">
+          <Badge variant={"secondary"}>Admin</Badge>
+          <Badge variant={"secondary"}>Manager</Badge>
+        </div>
+      </div>
       {/* status */}
       <div className="border-dashed border rounded-sm p-1 flex gap-2 items-center px-2 text-sm">
         <span className="text-gray-600">Status</span>
         <Separator orientation="vertical" />
         <div className="flex gap-2 items-center">
-          <Badge variant={"secondary"}>item 1</Badge>
-          <Badge variant={"secondary"}>item 1</Badge>
-        </div>
-      </div>
-      {/* category */}
-      <div className="border-dashed border rounded-sm p-1 flex gap-2 items-center px-2 text-sm">
-        <span className="text-gray-600">Category</span>
-        <Separator orientation="vertical" />
-        <div className="flex gap-2 items-center">
-          <Badge variant={"secondary"}>item 1</Badge>
-          <Badge variant={"secondary"}>item 1</Badge>
+          <Badge variant={"secondary"}>Active</Badge>
+          <Badge variant={"secondary"}>Pending</Badge>
         </div>
       </div>
       <Button variant={"ghost"} className="p-1 px-2">
@@ -42,10 +39,9 @@ function FilterArea() {
   )
 }
 
-export function ProductTable() {
-  const filteredProducts = useFilteredProducts()
-  const { searchQuery, setSearchQuery } = useFilterStore()
-  const productColumns = useProductColumns()
+export function UserTable() {
+  const { columns, editDialog } = useUserColumns()
+  const { users } = useUserStore()
 
   return (
     <div>
@@ -54,19 +50,23 @@ export function ProductTable() {
           <Input 
             placeholder="Search by name..." 
             className="max-w-sm h-10"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="flex items-center gap-4">
-            <StatusDropdown />
-            <CategoryDropdown />
+            <Button variant="outline" size="sm">
+              Role
+            </Button>
+            <Button variant="outline" size="sm">
+              Status
+            </Button>
           </div>
         </div>
         {/* filter area */}
         <FilterArea />
       </div>
-      {/* Products table */}
-      <DataTable columns={productColumns} data={filteredProducts} />
+      {/* Users table */}
+      <DataTable columns={columns} data={users} />
+      {/* Edit dialog */}
+      {editDialog}
     </div>
   )
 }
