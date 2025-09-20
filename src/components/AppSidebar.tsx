@@ -71,12 +71,12 @@ const items = [
   },
   {
     title: "Orders",
-    url: "#",
+    url: "/dashboard/orders",
     icon: ShoppingCart,
   },
   {
     title: "Stocks",
-    url: "#",
+    url: "/dashboard/stocks",
     icon: Warehouse,
   },
   {

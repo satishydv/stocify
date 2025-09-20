@@ -16,7 +16,7 @@ export type Supplier = {
     country: string
   }
   gstin?: string
-  category: "Electronics" | "Home Appliances" | "Fashion" | "Books" | "Sports" | "Other"
+  category: string
   website?: string
   status: "active" | "inactive"
   createdAt: string
@@ -47,46 +47,26 @@ export const getStatusBadge = (status: Supplier["status"]) => {
 }
 
 export const getCategoryBadge = (category: Supplier["category"]) => {
-  switch (category) {
-    case "Electronics":
-      return (
-        <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-          Electronics
-        </Badge>
-      )
-    case "Home Appliances":
-      return (
-        <Badge className="bg-purple-100 text-purple-700 hover:bg-purple-100">
-          Home Appliances
-        </Badge>
-      )
-    case "Fashion":
-      return (
-        <Badge className="bg-pink-100 text-pink-700 hover:bg-pink-100">
-          Fashion
-        </Badge>
-      )
-    case "Books":
-      return (
-        <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100">
-          Books
-        </Badge>
-      )
-    case "Sports":
-      return (
-        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-          Sports
-        </Badge>
-      )
-    case "Other":
-      return (
-        <Badge className="bg-gray-100 text-gray-700 hover:bg-gray-100">
-          Other
-        </Badge>
-      )
-    default:
-      return null
-  }
+  // Generate a consistent color based on category name
+  const colors = [
+    "bg-blue-100 text-blue-700 hover:bg-blue-100",
+    "bg-purple-100 text-purple-700 hover:bg-purple-100", 
+    "bg-pink-100 text-pink-700 hover:bg-pink-100",
+    "bg-orange-100 text-orange-700 hover:bg-orange-100",
+    "bg-green-100 text-green-700 hover:bg-green-100",
+    "bg-gray-100 text-gray-700 hover:bg-gray-100",
+    "bg-yellow-100 text-yellow-700 hover:bg-yellow-100",
+    "bg-indigo-100 text-indigo-700 hover:bg-indigo-100"
+  ]
+  
+  // Use category name to determine color index
+  const colorIndex = category.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length
+  
+  return (
+    <Badge className={colors[colorIndex]}>
+      {category}
+    </Badge>
+  )
 }
 
 export const formatLocation = (location: Supplier["companyLocation"]) => {

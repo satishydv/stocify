@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -16,7 +16,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { useSupplierStore } from "@/stores/supplierStore"
+import { useCategoryStore } from "@/stores/categoryStore"
 import { Supplier } from "@/lib/supplier-data"
+import { Category } from "@/lib/category-data"
 import { toast } from "sonner"
 
 interface SupplierFormData {
@@ -29,7 +31,7 @@ interface SupplierFormData {
   zip: string
   country: string
   gstin: string
-  category: Supplier["category"]
+  category: string
   website: string
   status: Supplier["status"]
 }
@@ -44,19 +46,10 @@ const initialFormData: SupplierFormData = {
   zip: "",
   country: "USA",
   gstin: "",
-  category: "Other",
+  category: "",
   website: "",
   status: "active"
 }
-
-const categories: Supplier["category"][] = [
-  "Electronics",
-  "Home Appliances", 
-  "Fashion",
-  "Books",
-  "Sports",
-  "Other"
-]
 
 export default function AddSupplierDialog() {
   const [formData, setFormData] = useState<SupplierFormData>(initialFormData)
@@ -64,6 +57,12 @@ export default function AddSupplierDialog() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const addSupplier = useSupplierStore((state) => state.addSupplier)
+  const { categories, fetchCategories } = useCategoryStore()
+
+  // Fetch categories when component mounts
+  useEffect(() => {
+    fetchCategories()
+  }, [fetchCategories])
 
   const handleInputChange = (field: keyof SupplierFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -87,6 +86,7 @@ export default function AddSupplierDialog() {
     if (!formData.state.trim()) newErrors.state = "State is required"
     if (!formData.zip.trim()) newErrors.zip = "ZIP code is required"
     if (!formData.country.trim()) newErrors.country = "Country is required"
+    if (!formData.category.trim()) newErrors.category = "Category is required"
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -242,15 +242,24 @@ export default function AddSupplierDialog() {
                 <select
                   id="supplier-category"
                   value={formData.category}
-                  onChange={(e) => handleInputChange("category", e.target.value as Supplier["category"])}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  onChange={(e) => handleInputChange("category", e.target.value)}
+                  className={`flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${errors.category ? "border-red-500" : ""}`}
                 >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
+                  <option value="">Select a category...</option>
+                  {categories
+                    .filter(category => category.status === 'active')
+                    .map((category) => (
+                      <option key={category.id} value={category.name}>
+                        {category.name}
+                      </option>
+                    ))}
                 </select>
+                {errors.category && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <div className="w-1 h-1 bg-red-500 rounded-full"></div>
+                    {errors.category}
+                  </div>
+                )}
               </div>
             </div>
           </div>
